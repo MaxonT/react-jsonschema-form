@@ -10,6 +10,11 @@ https://github.com/rjsf-team/react-jsonschema-form/blob/main/packages/docs/docs/
 ## @rjsf/core
 
 - Fix `Form` lagging on an `anyOf`/`oneOf` switch that leaves many keys in an object taking extra keys, which ran a fill of the whole form for each key ([#5924](https://github.com/rjsf-team/react-jsonschema-form/pull/5924), [#5836](https://github.com/rjsf-team/react-jsonschema-form/issues/5836))
+- Fix `Form` dropping a value the user entered, on an `anyOf`/`oneOf` switch, from an object a `patternProperties` subschema holding an `if` describes ([#5924](https://github.com/rjsf-team/react-jsonschema-form/pull/5924))
+
+## @rjsf/utils
+
+- Fix `getFilledDefault()` reading a property's default off its parent's fill, which a `patternProperties` subschema holding an `if` can change, rather than filling the property by itself ([#5924](https://github.com/rjsf-team/react-jsonschema-form/pull/5924))
 
 # 7.0.0-beta.1 (2026-11-20)
 
