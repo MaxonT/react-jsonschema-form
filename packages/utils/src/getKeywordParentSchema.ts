@@ -23,8 +23,8 @@ const MERGE_COMBINED_KEYS = [PROPERTIES_KEY, PATTERN_PROPERTIES_KEY, ADDITIONAL_
  *        either that schema or its target
  * @returns - The schema holding the keyword; `null` when `skipsRefs` is set and the path skips a chain of `$ref`s two
  *          of whose schemas hold its next key, unless it is `properties`, `patternProperties`, `additionalProperties`
- *          or `propertyNames`, so which of them the path indexes can't be told; or `undefined` when the path leads to
- *          no schema object or through a `$ref` that can't be resolved
+ *          or `propertyNames`, so which of them the path indexes can't be told; or `undefined` when the path isn't a
+ *          URI fragment, or leads to no schema object or through a `$ref` that can't be resolved
  */
 export default function getKeywordParentSchema<S extends StrictRJSFSchema = RJSFSchema>(
   rootSchema: S,
@@ -32,6 +32,10 @@ export default function getKeywordParentSchema<S extends StrictRJSFSchema = RJSF
   decodeSchemaPathKey: (key: string) => string = (key) => key,
   skipsRefs = false,
 ): S | null | undefined {
+  // Ajv starts the path of a keyword in another resource with that resource's `$id`, which isn't read from the root
+  if (!schemaPath.startsWith('#')) {
+    return undefined;
+  }
   try {
     let node: unknown = rootSchema;
     const keys = schemaPath.split('/').slice(1, -1).map(decodeSchemaPathKey);
